@@ -21,7 +21,7 @@
 
 # Options
 
-By default, this preset installs [Pest](https://pestphp.com), sets up icon components through [`unplugin-icons`](https://github.com/antfu/unplugin-icons), and configures auto-imports thanks to [`unplugin-auto-imports`](https://github.com/antfu/unplugin-auto-imports) and [`unplugin-components`](https://github.com/antfu/unplugin-components).
+By default, this preset installs [Pest](https://pestphp.com), sets up icon components through [`unplugin-icons`](https://github.com/antfu/unplugin-icons), and configures auto-imports thanks to [`unplugin-auto-import`](https://github.com/antfu/unplugin-auto-import) and [`unplugin-vue-components`](https://github.com/antfu/unplugin-vue-components).
 
 This is configurable by using command-line flags when using the preset.
 
