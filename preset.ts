@@ -152,6 +152,44 @@ async function installBase({ autoImports, i18n, icons }: Options) {
 		command: 'php',
 		arguments: ['artisan', 'hybridly:install'],
 	})
+	
+	await executeCommand({
+		title: 'publish typescript transformer config',
+		command: 'php',
+		arguments: ['artisan', 'vendor:publish', '--tag=typescript-transformer-config'],
+	})
+	
+	await editFiles({
+		title: "update typescript transformer config",
+		files: "config/typescript-transformer.php",
+		operations: [
+			{
+				type: "remove-line",
+				match: /Spatie\\TypeScriptTransformer\\Collectors\\DefaultCollector::class,/
+			},
+			{
+				type: "add-line",
+				match: /"collectors" => \[/,
+				lines: [
+					"Hybridly\Support\TypeScriptTransformer\DataResourceTypeScriptCollector::class,",
+					"Spatie\LaravelData\Support\TypeScriptTransformer\DataTypeScriptCollector::class,"
+				]
+			},
+			{
+				type: "remove-line",
+				match: /Spatie\\LaravelTypeScriptTransformer\\Transformers\\SpatieStateTransformer::class,/,
+				count: 3
+			},
+			{
+				type: "add-line",
+				match: /"collectors" => \[/,
+				lines: [
+					"Spatie\LaravelData\Support\TypeScriptTransformer\DataTypeScriptTransformer::class,",
+					"Spatie\TypeScriptTransformer\Transformers\EnumTransformer::class,"
+				]
+			}
+		],
+	});
 
 	await editFiles({
 		title: 'update welcome route',
