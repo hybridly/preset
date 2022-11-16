@@ -172,8 +172,8 @@ async function installBase({ autoImports, i18n, icons }: Options) {
 				match: /'collectors' => \[/,
 				position: 'after',
 				lines: [
-					'Hybridly\Support\TypeScriptTransformer\DataResourceTypeScriptCollector::class,',
-					'Spatie\LaravelData\Support\TypeScriptTransformer\DataTypeScriptCollector::class,'
+					'Hybridly\\Support\\TypeScriptTransformer\\DataResourceTypeScriptCollector::class,',
+					'Spatie\\LaravelData\\Support\\TypeScriptTransformer\\DataTypeScriptCollector::class,'
 				]
 			},
 			{
@@ -186,8 +186,8 @@ async function installBase({ autoImports, i18n, icons }: Options) {
 				match: /'transformers' => \[/,
 				position: 'after',
 				lines: [
-					'Spatie\LaravelData\Support\TypeScriptTransformer\DataTypeScriptTransformer::class,',
-					'Spatie\TypeScriptTransformer\Transformers\EnumTransformer::class,'
+					'Spatie\\LaravelData\\Support\\TypeScriptTransformer\\DataTypeScriptTransformer::class,',
+					'Spatie\\TypeScriptTransformer\\Transformers\\EnumTransformer::class,'
 				]
 			}
 		],
