@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Data\Hybridly;
+namespace App\Data;
 
 use App\Data\UserData;
 use Spatie\LaravelData\Data;
@@ -8,8 +8,7 @@ use Spatie\LaravelData\Data;
 class SecurityData extends Data
 {
     public function __construct(
-        public readonly ?UserData $user,
-        public readonly int $characters,
+        public readonly ?UserData $user
     ) {
     }
 }

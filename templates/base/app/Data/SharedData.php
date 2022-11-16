@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Data\Hybridly;
+namespace App\Data;
 
 use Spatie\LaravelData\Data;
 

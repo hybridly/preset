@@ -1,4 +1,4 @@
-interface GlobalHybridlyProperties extends App.Data.Hybridly.SharedData {
+interface GlobalHybridlyProperties extends App.Data.SharedData {
 	flash: {
 		success?: string
 		error?: string
