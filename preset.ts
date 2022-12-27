@@ -115,7 +115,7 @@ async function installBase({ autoImports, i18n, icons }: Options) {
 			...(icons ? ['unplugin-icons'] : []),
 			// i18n
 			...(i18n ? [
-				'@intlify/vite-plugin-vue-i18n',
+				'@intlify/unplugin-vue-i18n',
 				'vue-i18n',
 			] : []),
 		],
@@ -340,7 +340,7 @@ async function installI18n() {
 				type: 'add-line',
 				match: /import run from 'vite-plugin-run'/,
 				position: 'after',
-				lines: "import i18n from '@intlify/vite-plugin-vue-i18n'",
+				lines: "import i18n from '@intlify/unplugin-vue-i18n/vite'",
 			},
 			// add plugin
 			{
