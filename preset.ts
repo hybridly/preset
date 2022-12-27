@@ -340,7 +340,7 @@ async function installI18n() {
 				type: 'add-line',
 				match: /import run from 'vite-plugin-run'/,
 				position: 'after',
-				lines: "import i18n from '@intlify/unplugin-vue-i18n'",
+				lines: "import i18n from '@intlify/unplugin-vue-i18n/vite'",
 			},
 			// add plugin
 			{
