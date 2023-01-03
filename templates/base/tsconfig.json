@@ -23,9 +23,6 @@
 					]
 			}
 	},
-	"vueCompilerOptions": {
-			"experimentalSuppressInvalidJsxElementTypeErrors": true
-	},
 	"include": [
 			"resources/**/*"
 	],
