@@ -66,6 +66,22 @@ async function installBase({ autoImports, i18n, icons }: Options) {
 		},
 	})
 
+	await editFiles({
+		title: 'update CreatesApplication.php',
+		files: 'tests/CreatesApplication.php',
+		operations: {
+			type: 'add-line',
+			position: 'after',
+			match: /\$app->make\(Kernel::class\)/,
+			lines: [
+				'',
+				'$this->afterApplicationCreated(function () {',
+				'    $this->withoutVite();',
+				'});',
+			],
+		},
+	})
+
 	await extractTemplates({
 		title: 'extract templates',
 		from: 'base',
