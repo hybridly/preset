@@ -36,7 +36,7 @@ import Block from '@/views/components/block.vue'
 							</linearGradient>
 						</defs>
 					</svg>
-					<span class="title font-bold bg-clip-text text-center text-6xl text-transparent">Hybridly</span>
+					<span class="title font-bold bg-clip-text text-center text-6xl text-transparent leading-normal">Hybridly</span>
 				</div>
 			</div>
 
