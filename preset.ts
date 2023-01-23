@@ -1,10 +1,9 @@
-/* eslint-disable multiline-ternary */
-
 interface Options {
 	i18n: boolean
 	autoImports: boolean
 	pest: boolean
 	icons: boolean
+	strict: boolean
 }
 
 export default definePreset<Options>({
@@ -14,6 +13,7 @@ export default definePreset<Options>({
 		autoImports: true,
 		pest: true,
 		icons: true,
+		strict: true,
 	},
 	handler: async({ options }) => {
 		if (options.pest) {
@@ -36,6 +36,13 @@ export default definePreset<Options>({
 			await group({
 				title: 'install i18n',
 				handler: async() => await installI18n(),
+			})
+		}
+
+		if (options.strict) {
+			await group({
+				title: 'apply strict mode',
+				handler: async() => await applyStrictMode(),
 			})
 		}
 	},
@@ -384,6 +391,46 @@ async function installI18n() {
 					"		condition: (file) => ['lang/'].some((kw) => file.includes(kw)),",
 					'	},',
 				],
+			},
+		],
+	})
+}
+
+async function applyStrictMode() {
+	await editFiles({
+		files: 'app/Providers/AppServiceProvider.php',
+		operations: [
+			{
+				type: 'add-line',
+				match: /use Illuminate\\Support\\ServiceProvider;/,
+				position: 'after',
+				lines: [
+					'use Carbon\\CarbonImmutable;',
+					'use Illuminate\\Database\\Eloquent\\Model;',
+					'use Illuminate\\Foundation\\Console\\CliDumper;',
+					'use Illuminate\\Foundation\\Http\\HtmlDumper;',
+					'use Illuminate\\Support\\Facades\\Date;',
+				],
+			},
+			{
+				type: 'add-line',
+				match: /public function register\(\)/,
+				position: 'after',
+				lines: [
+					'{',
+					'    HtmlDumper::dontIncludeSource();',
+					'    CliDumper::dontIncludeSource();',
+					'',
+					'    Model::shouldBeStrict();',
+					'    Model::unguard();',
+					'    Date::use(CarbonImmutable::class);',
+				],
+			},
+			{
+				type: 'remove-line',
+				match: /Date::use/,
+				start: 1,
+				count: 2,
 			},
 		],
 	})
