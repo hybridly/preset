@@ -160,6 +160,17 @@ async function installBase({ autoImports, i18n, icons }: Options) {
 		},
 	})
 
+	await editFiles({
+		title: 'update minimum stability',
+		files: 'composer.json',
+		operations: {
+			type: 'edit-json',
+			merge: {
+				'minimum-stability': 'dev',
+			},
+		},
+	})
+
 	await installPackages({
 		title: 'add php dependencies',
 		for: 'php',
