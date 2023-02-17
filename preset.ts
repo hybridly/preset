@@ -177,6 +177,14 @@ async function installBase({ autoImports, i18n, icons }: Options) {
 		packages: [
 			'hybridly/laravel',
 			'spatie/laravel-data',
+		],
+	})
+	
+	await installPackages({
+		title: 'add php dev dependencies',
+		for: 'php',
+		dev: true,
+		packages: [
 			'spatie/laravel-typescript-transformer',
 		],
 	})
