@@ -416,6 +416,7 @@ async function applyStrictMode() {
 				match: /use Illuminate\\Support\\ServiceProvider;/,
 				position: 'after',
 				lines: [
+					'use App\\Models\\User;',
 					'use Carbon\\CarbonImmutable;',
 					'use Illuminate\\Database\\Eloquent\\Model;',
 					'use Illuminate\\Database\\Eloquent\\Relations\\Relation;',
@@ -437,7 +438,9 @@ async function applyStrictMode() {
 					'    Validator::excludeUnvalidatedArrayKeys();',
 					'    Model::shouldBeStrict();',
 					'    Model::unguard();',
-					'    Relation::enforceMorphMap([]);',
+					'    Relation::enforceMorphMap([',
+					"        'user' => User::class,",
+					'    ]);',
 					'    Date::use(CarbonImmutable::class);',
 				],
 			},
