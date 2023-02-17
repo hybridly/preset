@@ -181,7 +181,7 @@ async function installBase({ autoImports, i18n, icons }: Options) {
 	})
 	
 	await installPackages({
-		title: 'add php dependencies',
+		title: 'add php dev dependencies',
 		for: 'php',
 		dev: true,
 		packages: [
