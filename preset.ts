@@ -427,7 +427,7 @@ async function applyStrictMode() {
 			},
 			{
 				type: 'add-line',
-				match: /public function register\(\)/,
+				match: /public function boot\(\)/,
 				position: 'after',
 				lines: [
 					'{',
