@@ -14,7 +14,7 @@ export default defineConfig({
 		run([
 			{
 				run: ['php', 'artisan', 'typescript:transform'],
-				condition: (file) => ['Data.php', 'Enums/'].some((kw) => file.includes(kw)),
+				pattern: ['app/**/*Data.php', 'app/**/Enums/*.php'],
 			},
 		]),
 		hybridly(),
