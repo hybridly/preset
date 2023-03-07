@@ -156,7 +156,7 @@ async function installBase({ i18n }: Options) {
 			'spatie/laravel-data',
 		],
 	})
-	
+
 	await installPackages({
 		title: 'add php dev dependencies',
 		for: 'php',
@@ -232,15 +232,15 @@ async function installI18n() {
 			// add import
 			{
 				type: 'add-line',
-				match: /virtual:hybridly\/router/,
-				position: 'before',
+				match: /@vueuse\/head/,
+				position: 'after',
 				lines: "import i18n from './i18n'",
 			},
 			// add plugin
 			{
 				type: 'add-line',
 				match: /vue\.use\(/,
-				position: 'after',
+				position: 'before',
 				lines: 'vue.use(i18n)',
 			},
 		],
