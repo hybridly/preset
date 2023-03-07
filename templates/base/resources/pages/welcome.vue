@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import Block from '@/views/components/block.vue'
+useHead({
+	title: 'Welcome'
+})
 </script>
 
-<template>
+<template layout>
 	<div class="items-top relative flex justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
 		<div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
 			<div class="flex justify-center items-center pt-8 sm:pt-0 sm:gap-12">
@@ -43,7 +45,7 @@ import Block from '@/views/components/block.vue'
 			<div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
 				<div class="grid grid-cols-1 md:grid-cols-2">
 					<!-- Documentation -->
-					<Block
+					<welcome-item
 						title="Documentation"
 						url="https://laravel.com/docs"
 					>
@@ -63,10 +65,10 @@ import Block from '@/views/components/block.vue'
 						<template #default>
 							Laravel has wonderful, thorough documentation covering every aspect of the framework. Whether you are new to the framework or have previous experience with Laravel, we recommend reading all of the documentation from beginning to end.
 						</template>
-					</Block>
+					</welcome-item>
 
 					<!-- Laracasts -->
-					<Block
+					<welcome-item
 						class="border-t border-gray-200 dark:border-gray-700 md:border-t-0 md:border-l"
 						title="Laracasts"
 						url="https://laracasts.com"
@@ -85,10 +87,10 @@ import Block from '@/views/components/block.vue'
 						<template #default>
 							Laracasts offers thousands of video tutorials on Laravel, PHP, and JavaScript development. Check them out, see for yourself, and massively level up your development skills in the process.
 						</template>
-					</Block>
+					</welcome-item>
 
 					<!-- Laracasts -->
-					<Block
+					<welcome-item
 						class="border-t border-gray-200 dark:border-gray-700"
 						title="Laravel News"
 						url="https://laravel-news.com/"
@@ -107,10 +109,10 @@ import Block from '@/views/components/block.vue'
 						<template #default>
 							Laravel News is a community driven portal and newsletter aggregating all of the latest and most important news in the Laravel ecosystem, including new package releases and tutorials.
 						</template>
-					</Block>
+					</welcome-item>
 
 					<!-- Ecosystem -->
-					<Block
+					<welcome-item
 						class="p-6 border-t border-gray-200 dark:border-gray-700 md:border-l"
 						title="Vibrant ecosystem"
 					>
@@ -128,7 +130,7 @@ import Block from '@/views/components/block.vue'
 						<template #default>
 							Laravel's robust library of first-party tools and libraries, such as <a href="https://forge.laravel.com" class="underline">Forge</a>, <a href="https://vapor.laravel.com" class="underline">Vapor</a>, <a href="https://nova.laravel.com" class="underline">Nova</a>, and <a href="https://envoyer.io" class="underline">Envoyer</a> help you take your projects to the next level. Pair them with powerful open source libraries like <a href="https://laravel.com/docs/billing" class="underline">Cashier</a>, <a href="https://laravel.com/docs/dusk" class="underline">Dusk</a>, <a href="https://laravel.com/docs/broadcasting" class="underline">Echo</a>, <a href="https://laravel.com/docs/horizon" class="underline">Horizon</a>, <a href="https://laravel.com/docs/sanctum" class="underline">Sanctum</a>, <a href="https://laravel.com/docs/telescope" class="underline">Telescope</a>, and more.
 						</template>
-					</Block>
+					</welcome-item>
 				</div>
 			</div>
 

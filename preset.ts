@@ -1,8 +1,8 @@
+import fs from 'node:fs'
+
 interface Options {
 	i18n: boolean
-	autoImports: boolean
 	pest: boolean
-	icons: boolean
 	strict: boolean
 }
 
@@ -10,13 +10,11 @@ export default definePreset<Options>({
 	name: 'laravel:hybridly',
 	options: {
 		i18n: false,
-		autoImports: true,
 		pest: true,
-		icons: true,
 		strict: true,
 	},
 	handler: async({ options }) => {
-		if (options.pest) {
+		if (options.pest && !fs.existsSync('tests/Pest.php')) {
 			await applyNestedPreset({
 				title: 'install Pest',
 				preset: 'laravel-presets/pest',
@@ -24,13 +22,6 @@ export default definePreset<Options>({
 		}
 
 		await installBase(options)
-
-		if (options.autoImports) {
-			await group({
-				title: 'install auto-imports',
-				handler: async() => await installAutoImports(options),
-			})
-		}
 
 		if (options.i18n) {
 			await group({
@@ -48,7 +39,7 @@ export default definePreset<Options>({
 	},
 })
 
-async function installBase({ autoImports, i18n, icons }: Options) {
+async function installBase({ i18n }: Options) {
 	await deletePaths({
 		title: 'delete unused project files',
 		paths: [
@@ -63,13 +54,7 @@ async function installBase({ autoImports, i18n, icons }: Options) {
 		operations: {
 			type: 'add-line',
 			position: 'append',
-			lines: [
-				// Types and I18n
-				'resources/types/*.d.ts',
-				'!resources/types/hybridly.d.ts',
-				'!resources/types/shims-*.d.ts',
-				'resources/i18n/locales.json',
-			],
+			lines: '.hybridly',
 		},
 	})
 
@@ -89,6 +74,19 @@ async function installBase({ autoImports, i18n, icons }: Options) {
 		},
 	})
 
+	await editFiles({
+		title: 'update Kernel.php',
+		files: 'app/Http/Kernel.php',
+		operations: {
+			type: 'add-line',
+			match: /SubstituteBindings::class/,
+			position: 'after',
+			lines: [
+				'\\App\\Http\\Middleware\\HandleHybridRequests::class',
+			],
+		},
+	})
+
 	await extractTemplates({
 		title: 'extract templates',
 		from: 'base',
@@ -101,6 +99,7 @@ async function installBase({ autoImports, i18n, icons }: Options) {
 			type: 'edit-json',
 			delete: [
 				'devDependencies.lodash',
+				'devDependencies.laravel-vite-plugin',
 			],
 		},
 	})
@@ -117,25 +116,14 @@ async function installBase({ autoImports, i18n, icons }: Options) {
 			'typescript',
 			// Vue
 			'vue',
-			'@vitejs/plugin-vue',
 			'@vue/runtime-core',
 			'@vueuse/core',
 			'@vueuse/head',
-			// Vite
-			'laravel-vite-plugin',
-			'vite-plugin-run',
 			// Tailwind CSS
 			'autoprefixer',
 			'tailwindcss',
 			'postcss',
 			'@tailwindcss/forms',
-			// Auto imports
-			...(autoImports ? [
-				'unplugin-auto-import',
-				'unplugin-vue-components',
-			] : []),
-			// Icons
-			...(icons ? ['unplugin-icons'] : []),
 			// i18n
 			...(i18n ? [
 				'@intlify/unplugin-vue-i18n',
@@ -160,22 +148,11 @@ async function installBase({ autoImports, i18n, icons }: Options) {
 		},
 	})
 
-	await editFiles({
-		title: 'update minimum stability',
-		files: 'composer.json',
-		operations: {
-			type: 'edit-json',
-			merge: {
-				'minimum-stability': 'dev',
-			},
-		},
-	})
-
 	await installPackages({
 		title: 'add php dependencies',
 		for: 'php',
 		packages: [
-			'hybridly/laravel',
+			'hybridly/laravel:0.1.0-alpha.3',
 			'spatie/laravel-data',
 		],
 	})
@@ -187,12 +164,6 @@ async function installBase({ autoImports, i18n, icons }: Options) {
 		packages: [
 			'spatie/laravel-typescript-transformer',
 		],
-	})
-
-	await executeCommand({
-		title: 'install Hybridly',
-		command: 'php',
-		arguments: ['artisan', 'hybridly:install'],
 	})
 
 	await executeCommand({
@@ -213,9 +184,11 @@ async function installBase({ autoImports, i18n, icons }: Options) {
 				type: 'add-line',
 				match: /'collectors' => \[/,
 				position: 'after',
+				indent: '        ',
 				lines: [
 					'Hybridly\\Support\\TypeScriptTransformer\\DataResourceTypeScriptCollector::class,',
 					'Spatie\\LaravelData\\Support\\TypeScriptTransformer\\DataTypeScriptCollector::class,',
+					'Spatie\\TypeScriptTransformer\\Collectors\\EnumCollector::class,',
 				],
 			},
 			{
@@ -227,6 +200,7 @@ async function installBase({ autoImports, i18n, icons }: Options) {
 				type: 'add-line',
 				match: /'transformers' => \[/,
 				position: 'after',
+				indent: '        ',
 				lines: [
 					'Spatie\\LaravelData\\Support\\TypeScriptTransformer\\DataTypeScriptTransformer::class,',
 					'Spatie\\TypeScriptTransformer\\Transformers\\EnumTransformer::class,',
@@ -242,111 +216,6 @@ async function installBase({ autoImports, i18n, icons }: Options) {
 			type: 'update-content',
 			update: (content) => content.replace('view(', 'hybridly('),
 		},
-	})
-}
-
-async function installAutoImports({ icons }: Options) {
-	await editFiles({
-		title: 'update vite.config.ts',
-		files: 'vite.config.ts',
-		operations: [
-			// add imports
-			{
-				type: 'add-line',
-				match: /import hybridly from/,
-				position: 'after',
-				lines: [
-					"import hybridlyImports from 'hybridly/auto-imports'",
-					"import hybridlyResolver from 'hybridly/resolver'",
-					"import autoimport from 'unplugin-auto-import/vite'",
-					"import components from 'unplugin-vue-components/vite'",
-					...(icons ? [
-						"import iconsResolver from 'unplugin-icons/resolver'",
-						"import { FileSystemIconLoader } from 'unplugin-icons/loaders'",
-						"import icons from 'unplugin-icons/vite'",
-					] : []),
-				],
-			},
-			// configure `autoimport`
-			{
-				type: 'add-line',
-				match: /vue\(\)/,
-				position: 'after',
-				lines: [
-					'autoimport({',
-					"	dts: 'resources/types/auto-imports.d.ts',",
-					'	vueTemplate: true,',
-					'	imports: [',
-					"		'vue',",
-					"		'@vueuse/core',",
-					"		'@vueuse/head',",
-					'		hybridlyImports,',
-					'	],',
-					'	dirs: [',
-					"		'./resources/composables',",
-					"		'./resources/utils',",
-					'	],',
-					'}),',
-				],
-			},
-			// configure `autoimport`
-			{
-				type: 'add-line',
-				match: /vue\(\)/,
-				position: 'after',
-				lines: [
-					'components({',
-					'	dirs: [',
-					"		'./resources/views/components',",
-					'	],',
-					'	resolvers: [',
-					'		hybridlyResolver(),',
-					...(icons ? [
-						'		iconsResolver({',
-						"			customCollections: ['custom'],",
-						'		}),',
-					] : []),
-					'	],',
-					'	directoryAsNamespace: true,',
-					"	dts: 'resources/types/components.d.ts',",
-					'}),',
-				],
-			},
-			// configure `icons`
-			{
-				skipIf: () => !icons,
-				type: 'add-line',
-				match: /vue\(\)/,
-				position: 'after',
-				lines: [
-					'icons({',
-					'	autoInstall: true,',
-					'	customCollections: {',
-					"		custom: FileSystemIconLoader('./resources/icons'),",
-					'	},',
-					'}),',
-				],
-			},
-		],
-	})
-
-	await editFiles({
-		title: 'add icons definition to tsconfig.json',
-		files: 'tsconfig.json',
-		operations: [
-			{
-				skipIf: () => !icons,
-				type: 'add-line',
-				match: /"vite\/client"/,
-				position: 'after',
-				lines: '"unplugin-icons/types/vue"',
-			},
-			{
-				skipIf: () => !icons,
-				type: 'update-content',
-				update: (content) => content.replace('"vite/client"', '"vite/client",'),
-			},
-		],
 	})
 }
 
@@ -395,20 +264,21 @@ async function installI18n() {
 				position: 'after',
 				lines: [
 					'i18n({',
-					"	include: path.resolve(__dirname, './resources/i18n/locales.json'),",
+					"	include: path.resolve(__dirname, '.hybridly/locales.json'),",
 					'}),',
 				],
 			},
-			// add automation
+			// add auto-imports
 			{
 				type: 'add-line',
-				match: /run\(\[/,
-				position: 'after',
+				match: /laravel: {/,
+				position: 'before',
 				lines: [
-					'	{',
-					"		run: ['php', 'artisan', 'hybridly:i18n'],",
-					"		condition: (file) => ['lang/'].some((kw) => file.includes(kw)),",
-					'	},',
+					'autoImports: {',
+					'	imports: [',
+					'		{ \'@/application/i18n\': [\'t\', \'i18n\'] },',
+					'	],',
+					'},',
 				],
 			},
 		],
