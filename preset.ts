@@ -209,6 +209,16 @@ async function installBase({ i18n }: Options) {
 		],
 	})
 
+	// Fixes view:cache
+	await editFiles({
+		title: 'update views config',
+		files: 'config/view.php',
+		operations: {
+			type: 'update-content',
+			update: (content) => content.replace('resource_path(\'views\')', 'resource_path()'),
+		},
+	})
+
 	await editFiles({
 		title: 'update welcome route',
 		files: 'routes/web.php',
