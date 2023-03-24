@@ -58,22 +58,6 @@ async function installBase({ i18n }: Options) {
 		},
 	})
 
-	await editFiles({
-		title: 'update TestCase.php',
-		files: 'tests/TestCase.php',
-		operations: [
-            {
-                type: 'add-line',
-                position: 'after',
-                match: /parent::setUp()/,
-                skipIf: (content) => content.includes('$this->withoutVite()'),
-                lines: [
-                    '',
-                    '$this->withoutVite();',
-                ],
-            },
-        ],
-	})
 
 	await editFiles({
 		title: 'update Kernel.php',
