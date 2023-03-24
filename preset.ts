@@ -280,7 +280,7 @@ async function installI18n() {
 	})
 }
 
-async function applyStrictMode() {    
+async function applyStrictMode() {
 	await editFiles({
 		files: 'app/Providers/AppServiceProvider.php',
 		operations: [
