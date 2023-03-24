@@ -59,19 +59,20 @@ async function installBase({ i18n }: Options) {
 	})
 
 	await editFiles({
-		title: 'update CreatesApplication.php',
-		files: 'tests/CreatesApplication.php',
-		operations: {
-			type: 'add-line',
-			position: 'after',
-			match: /\$app->make\(Kernel::class\)/,
-			lines: [
-				'',
-				'$this->afterApplicationCreated(function () {',
-				'    $this->withoutVite();',
-				'});',
-			],
-		},
+		title: 'update TestCase.php',
+		files: 'tests/TestCase.php',
+		operations: [
+            {
+                type: 'add-line',
+                position: 'after',
+                match: /parent::setUp()/,
+                skipIf: (content) => content.includes('$this->withoutVite()'),
+                lines: [
+                    '',
+                    '$this->withoutVite();',
+                ],
+            },
+        ],
 	})
 
 	await editFiles({
@@ -296,6 +297,32 @@ async function installI18n() {
 }
 
 async function applyStrictMode() {
+    await editFiles({
+		title: 'update TestCase.php',
+		files: 'tests/TestCase.php',
+		operations: [
+            {
+                type: 'add-line',
+                position: 'after',
+                match: /use Illuminate\Foundation\Testing\TestCase as BaseTestCase/,
+                skipIf: (content) => content.includes('use Illuminate\Support\Facades\Http'),
+                lines: [
+                    'use Illuminate\Support\Facades\Http;',
+                ],
+            },
+            {
+                type: 'add-line',
+                position: 'after',
+                match: /$this->withoutVite()/,
+                skipIf: (content) => content.includes('Http::preventStrayRequests()'),
+                lines: [
+                    '',
+                    'Http::preventStrayRequests();',
+                ],
+            },
+        ],
+	})
+    
 	await editFiles({
 		files: 'app/Providers/AppServiceProvider.php',
 		operations: [
