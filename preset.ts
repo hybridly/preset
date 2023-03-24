@@ -4,6 +4,7 @@ interface Options {
 	i18n: boolean
 	pest: boolean
 	strict: boolean
+	ide: boolean
 }
 
 export default definePreset<Options>({
@@ -12,6 +13,7 @@ export default definePreset<Options>({
 		i18n: false,
 		pest: true,
 		strict: true,
+		ide: true,
 	},
 	handler: async({ options }) => {
 		if (options.pest && !fs.existsSync('tests/Pest.php')) {
@@ -36,10 +38,17 @@ export default definePreset<Options>({
 				handler: async() => await applyStrictMode(),
 			})
 		}
+
+		if (options.ide) {
+			await group({
+				title: 'setup ide helper',
+				handler: async() => await applyIdeHelper(),
+			})
+		}
 	},
 })
 
-async function installBase({ i18n }: Options) {
+async function installBase({ i18n, ide }: Options) {
 	await deletePaths({
 		title: 'delete unused project files',
 		paths: [
@@ -51,11 +60,18 @@ async function installBase({ i18n }: Options) {
 	await editFiles({
 		title: 'update .gitignore',
 		files: '.gitignore',
-		operations: {
-			type: 'add-line',
-			position: 'append',
-			lines: '.hybridly',
-		},
+		operations: [
+			{
+				type: 'add-line',
+				position: 'append',
+				lines: '.hybridly',
+			},
+			...(ide ? [{
+				type: 'add-line' as const,
+				position: 'append' as const,
+				lines: '_ide_helper*',
+			}] : []),
+		],
 	})
 
 
@@ -148,6 +164,7 @@ async function installBase({ i18n }: Options) {
 		dev: true,
 		packages: [
 			'spatie/laravel-typescript-transformer',
+			...(ide ? ['barryvdh/laravel-ide-helper'] : []),
 		],
 	})
 
@@ -324,5 +341,37 @@ async function applyStrictMode() {
 				count: 2,
 			},
 		],
+	})
+}
+
+async function applyIdeHelper() {
+	await editFiles({
+		title: 'add ide helper scripts',
+		files: 'composer.json',
+		operations: {
+			type: 'edit-json',
+			merge: {
+				scripts: {
+					'post-autoload-dump': [
+						'Illuminate\\Foundation\\ComposerScripts::postAutoloadDump',
+						'@php artisan package:discover --ansi',
+						'@autocomplete',
+					],
+					'autocomplete': [
+						'@php artisan ide-helper:eloquent || true',
+						'@php artisan ide-helper:generate || true',
+						'@php artisan ide-helper:meta || true',
+						'@php artisan ide-helper:models -M || true',
+					],
+				},
+			},
+		},
+	})
+
+	await executeCommand({
+		title: 'generate ide helpers',
+		command: 'composer',
+		arguments: ['autocomplete'],
+		ignoreExitCode: true,
 	})
 }
