@@ -69,11 +69,10 @@ async function installBase({ i18n, ide }: Options) {
 			...(ide ? [{
 				type: 'add-line' as const,
 				position: 'append' as const,
-				lines: '_ide_helper*',
+				lines: ['_ide_helper*', '.phpstorm.meta.php'],
 			}] : []),
 		],
 	})
-
 
 	await editFiles({
 		title: 'update Kernel.php',
