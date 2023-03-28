@@ -1,5 +1,6 @@
-/** @type import('tailwindcss').Config */
-module.exports = {
+import { type Config } from 'tailwindcss'
+
+export default {
 	content: [
 		'./resources/**/*.{js,ts,vue,blade.php}',
 	],
@@ -9,4 +10,4 @@ module.exports = {
 	plugins: [
 		require('@tailwindcss/forms'),
 	],
-}
+} satisfies Config
