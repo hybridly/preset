@@ -152,7 +152,7 @@ async function installBase({ i18n, ide }: Options) {
 		title: 'add php dependencies',
 		for: 'php',
 		packages: [
-			'hybridly/laravel:0.1.0-alpha.9',
+			'hybridly/laravel:0.1.0',
 			'spatie/laravel-data',
 		],
 	})
