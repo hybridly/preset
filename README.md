@@ -21,7 +21,7 @@
 
 # Options
 
-By default, this preset installs [Pest](https://pestphp.com), sets up icon components through [`unplugin-icons`](https://github.com/antfu/unplugin-icons), and configures auto-imports thanks to [`unplugin-auto-import`](https://github.com/antfu/unplugin-auto-import) and [`unplugin-vue-components`](https://github.com/antfu/unplugin-vue-components).
+By default, this preset installs [Pest](https://pestphp.com), sets up strict mode and installs Laravel IDE helper.
 
 This is configurable by using command-line flags when using the preset.
 
@@ -30,9 +30,9 @@ This is configurable by using command-line flags when using the preset.
 | Flag                | Description                                                            |
 | ------------------- | ---------------------------------------------------------------------- |
 | `--i18n`            | Install and configure `vue-i18n` and its Vite plugin                   |
-| `--no-pest`         | Skip Pest installation                                                 |
-| `--no-icons`        | Skip installation of `unplugin-icons`                                  |
-| `--no-auto-imports` | Skip installation of `unplugin-auto-imports` and `unplugin-components` |
+| `--no-pest`         | Skip Pest installation.                                                |
+| `--no-strict`       | Skip setup of strict mode.                                             |
+| `--no-ide`          | Skip installation of IDE helper.                                       |
 
 <p align="center">
   <br />
