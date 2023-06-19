@@ -4,10 +4,10 @@
   "license": "MIT",
   "preset": "preset.ts",
   "devDependencies": {
-    "@innocenzi/eslint-config": "^0.16.4",
-    "@preset/core": "^0.10.0",
-    "@types/node": "^18.15.7",
-    "eslint": "^8.36.0",
-    "typescript": "^5.0.2"
+    "@innocenzi/eslint-config": "^0.20.0",
+    "@preset/core": "^0.11.0",
+    "@types/node": "^18.16.18",
+    "eslint": "^8.43.0",
+    "typescript": "^5.1.3"
   }
 }
