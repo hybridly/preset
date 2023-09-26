@@ -1,5 +1,5 @@
 import { initializeHybridly } from 'virtual:hybridly/config'
-import { createHead } from '@vueuse/head'
+import { createHead } from '@unhead/vue'
 import './tailwind.css'
 
 initializeHybridly({

@@ -118,7 +118,7 @@ async function installBase({ i18n, ide }: Options) {
 			'vue',
 			'@vue/runtime-core',
 			'@vueuse/core',
-			'@vueuse/head',
+			'@unhead/vue',
 			// Tailwind CSS
 			'autoprefixer',
 			'tailwindcss',
@@ -233,7 +233,7 @@ async function installI18n() {
 			// add import
 			{
 				type: 'add-line',
-				match: /@vueuse\/head/,
+				match: /@unhead\/vue/,
 				position: 'after',
 				lines: "import i18n from './i18n'",
 			},
