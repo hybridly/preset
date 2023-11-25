@@ -2,7 +2,7 @@
 
 namespace App\Data;
 
-use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Spatie\LaravelData\Data;
 
 final class UserData extends Data
@@ -11,7 +11,7 @@ final class UserData extends Data
         public readonly ?int $id,
         public readonly string $name,
         public readonly string $email,
-        public readonly ?Carbon $email_verified_at,
+        public readonly ?CarbonInterface $email_verified_at,
     ) {
     }
 }
