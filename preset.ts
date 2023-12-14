@@ -165,6 +165,7 @@ async function installBase({ i18n, ide }: Options) {
 			'spatie/laravel-typescript-transformer',
 			...(ide ? ['barryvdh/laravel-ide-helper'] : []),
 		],
+		additionalArgs: ['-W'],
 	})
 
 	await executeCommand({
