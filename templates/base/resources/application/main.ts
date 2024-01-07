@@ -4,7 +4,7 @@ import './tailwind.css'
 
 initializeHybridly({
 	enhanceVue: (vue) => {
-		vue.use(createHead)
+		vue.use(createHead())
 		
 		useHead({
 			titleTemplate: (title) => title ? `${title} — Hybridly` : 'Hybridly',
