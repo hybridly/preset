@@ -294,7 +294,7 @@ async function applyStrictMode() {
 			{
 				type: 'add-line',
 				match: /use Illuminate\\Support\\ServiceProvider;/,
-				position: 'after',
+				position: 'before',
 				lines: [
 					'use App\\Models\\User;',
 					'use Carbon\\CarbonImmutable;',
