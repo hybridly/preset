@@ -314,7 +314,6 @@ async function applyStrictMode() {
 					'{',
 					'    HtmlDumper::dontIncludeSource();',
 					'    CliDumper::dontIncludeSource();',
-					'',
 					'    Validator::excludeUnvalidatedArrayKeys();',
 					'    Model::shouldBeStrict();',
 					'    Model::unguard();',
