@@ -82,7 +82,7 @@ async function installBase({ i18n, ide }: Options) {
 			match: /SubstituteBindings::class/,
 			position: 'after',
 			lines: [
-				'\\App\\Http\\Middleware\\HandleHybridRequests::class',
+				'\\App\\Http\\Middleware\\HandleHybridRequests::class,',
 			],
 		},
 	})
