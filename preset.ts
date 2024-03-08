@@ -197,7 +197,6 @@ async function installBase({ i18n, ide }: Options) {
 				lines: [
 					'Hybridly\\Support\\TypeScriptTransformer\\DataResourceTypeScriptCollector::class,',
 					'Spatie\\LaravelData\\Support\\TypeScriptTransformer\\DataTypeScriptCollector::class,',
-					'Spatie\\TypeScriptTransformer\\Collectors\\EnumCollector::class,',
 				],
 			},
 			{
@@ -301,7 +300,7 @@ async function applyStrictMode() {
 			{
 				type: 'add-line',
 				match: /use Illuminate\\Support\\ServiceProvider;/,
-				position: 'after',
+				position: 'before',
 				lines: [
 					'use App\\Models\\User;',
 					'use Carbon\\CarbonImmutable;',
@@ -321,7 +320,6 @@ async function applyStrictMode() {
 					'{',
 					'    HtmlDumper::dontIncludeSource();',
 					'    CliDumper::dontIncludeSource();',
-					'',
 					'    Validator::excludeUnvalidatedArrayKeys();',
 					'    Model::shouldBeStrict();',
 					'    Model::unguard();',
