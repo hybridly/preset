@@ -75,16 +75,23 @@ async function installBase({ i18n, ide }: Options) {
 	})
 
 	await editFiles({
-		title: 'update Kernel.php',
-		files: 'app/Http/Kernel.php',
-		operations: {
-			type: 'add-line',
-			match: /SubstituteBindings::class/,
-			position: 'after',
-			lines: [
-				'\\App\\Http\\Middleware\\HandleHybridRequests::class,',
-			],
-		},
+		title: 'add middleware',
+		files: 'bootstrap/app.php',
+		operations: [
+			{
+				type: 'remove-line',
+				match: /\/\//,
+			},
+			{
+				type: 'add-line',
+				match: /->withMiddleware/,
+				position: 'after',
+				indent: 8,
+				lines: [
+					'$middleware->append(\\App\\Http\\Middleware\\HandleHybridRequests::class);',
+				],
+			},
+		],
 	})
 
 	await extractTemplates({
