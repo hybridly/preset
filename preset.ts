@@ -88,7 +88,7 @@ async function installBase({ i18n, ide }: Options) {
 				position: 'after',
 				indent: 8,
 				lines: [
-					'$middleware->append(\\App\\Http\\Middleware\\HandleHybridRequests::class);',
+					'$middleware->appendToGroup('web', [\\App\\Http\\Middleware\\HandleHybridRequests::class]);',
 				],
 			},
 		],
