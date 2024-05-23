@@ -350,7 +350,7 @@ async function applyIdeHelper() {
 					'post-autoload-dump': [
 						'Illuminate\\Foundation\\ComposerScripts::postAutoloadDump',
 						'@php artisan package:discover --ansi',
-						'@autocomplete',
+            "([ $COMPOSER_DEV_MODE -eq 1 ] && composer autocomplete) || true",
 					],
 					'autocomplete': [
 						'@php artisan ide-helper:eloquent || true',
