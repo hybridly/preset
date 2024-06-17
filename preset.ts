@@ -347,30 +347,35 @@ async function applyIdeHelper() {
 	await editFiles({
 		title: 'add ide helper scripts',
 		files: 'composer.json',
-		operations: {
-			type: 'edit-json',
-			delete: 'scripts',
-			merge: {
-				scripts: {
-					'test': 'pest',
-					'lint': 'php-cs-fixer fix --allow-risky=yes --dry-run',
-					'lint:fix': 'php-cs-fixer fix --allow-risky=yes',
-					'post-update-cmd': '@php artisan vendor:publish --tag=laravel-assets --ansi --force',
-					'post-root-package-install': "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
-					'post-autoload-dump': [
-						'Illuminate\\Foundation\\ComposerScripts::postAutoloadDump',
-						'@php artisan package:discover --ansi',
-						'([ $COMPOSER_DEV_MODE -eq 1 ] && composer autocomplete) || true',
-					],
-					'autocomplete': [
-						'@php artisan ide-helper:eloquent || true',
-						'@php artisan ide-helper:generate || true',
-						'@php artisan ide-helper:meta || true',
-						'@php artisan ide-helper:models -M || true',
-					],
+		operations: [
+			{
+				type: 'edit-json',
+				delete: 'scripts',
+			},
+			{
+				type: 'edit-json',
+				merge: {
+					scripts: {
+						'test': 'pest',
+						'lint': 'php-cs-fixer fix --allow-risky=yes --dry-run',
+						'lint:fix': 'php-cs-fixer fix --allow-risky=yes',
+						'post-update-cmd': '@php artisan vendor:publish --tag=laravel-assets --ansi --force',
+						'post-root-package-install': "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
+						'post-autoload-dump': [
+							'Illuminate\\Foundation\\ComposerScripts::postAutoloadDump',
+							'@php artisan package:discover --ansi',
+							'([ $COMPOSER_DEV_MODE -eq 1 ] && composer autocomplete) || true',
+						],
+						'autocomplete': [
+							'@php artisan ide-helper:eloquent || true',
+							'@php artisan ide-helper:generate || true',
+							'@php artisan ide-helper:meta || true',
+							'@php artisan ide-helper:models -M || true',
+						],
+					},
 				},
 			},
-		},
+		],
 	})
 
 	await executeCommand({
