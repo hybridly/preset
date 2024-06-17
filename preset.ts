@@ -15,7 +15,7 @@ export default definePreset<Options>({
 		strict: true,
 		ide: true,
 	},
-	handler: async({ options }) => {
+	handler: async ({ options }) => {
 		if (options.pest && !fs.existsSync('tests/Pest.php')) {
 			await applyNestedPreset({
 				title: 'install Pest',
@@ -28,21 +28,21 @@ export default definePreset<Options>({
 		if (options.i18n) {
 			await group({
 				title: 'install i18n',
-				handler: async() => await installI18n(),
+				handler: async () => await installI18n(),
 			})
 		}
 
 		if (options.strict) {
 			await group({
 				title: 'apply strict mode',
-				handler: async() => await applyStrictMode(),
+				handler: async () => await applyStrictMode(),
 			})
 		}
 
 		if (options.ide) {
 			await group({
 				title: 'setup ide helper',
-				handler: async() => await applyIdeHelper(),
+				handler: async () => await applyIdeHelper(),
 			})
 		}
 	},
@@ -66,11 +66,13 @@ async function installBase({ i18n, ide }: Options) {
 				position: 'append',
 				lines: '.hybridly',
 			},
-			...(ide ? [{
-				type: 'add-line' as const,
-				position: 'append' as const,
-				lines: ['_ide_helper*', '.phpstorm.meta.php'],
-			}] : []),
+			...(ide
+				? [{
+						type: 'add-line' as const,
+						position: 'append' as const,
+						lines: ['_ide_helper*', '.phpstorm.meta.php'],
+					}]
+				: []),
 		],
 	})
 
@@ -132,10 +134,12 @@ async function installBase({ i18n, ide }: Options) {
 			'postcss',
 			'@tailwindcss/forms',
 			// i18n
-			...(i18n ? [
-				'@intlify/unplugin-vue-i18n',
-				'vue-i18n',
-			] : []),
+			...(i18n
+				? [
+						'@intlify/unplugin-vue-i18n',
+						'vue-i18n',
+					]
+				: []),
 		],
 	})
 
@@ -345,12 +349,18 @@ async function applyIdeHelper() {
 		files: 'composer.json',
 		operations: {
 			type: 'edit-json',
+			delete: 'scripts',
 			merge: {
 				scripts: {
+					'test': 'pest',
+					'lint': 'php-cs-fixer fix --allow-risky=yes --dry-run',
+					'lint:fix': 'php-cs-fixer fix --allow-risky=yes',
+					'post-update-cmd': '@php artisan vendor:publish --tag=laravel-assets --ansi --force',
+					'post-root-package-install': "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
 					'post-autoload-dump': [
 						'Illuminate\\Foundation\\ComposerScripts::postAutoloadDump',
 						'@php artisan package:discover --ansi',
-            "([ $COMPOSER_DEV_MODE -eq 1 ] && composer autocomplete) || true",
+						'([ $COMPOSER_DEV_MODE -eq 1 ] && composer autocomplete) || true',
 					],
 					'autocomplete': [
 						'@php artisan ide-helper:eloquent || true',
