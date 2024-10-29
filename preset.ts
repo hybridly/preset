@@ -166,6 +166,7 @@ async function installBase({ i18n, ide }: Options) {
 			'hybridly/laravel',
 			'spatie/laravel-data',
 		],
+		additionalArgs: ['-W'],
 	})
 
 	await installPackages({
