@@ -129,9 +129,8 @@ async function installBase({ i18n, ide }: Options) {
 			'@vueuse/core',
 			'@unhead/vue',
 			// Tailwind CSS
-			'autoprefixer',
 			'tailwindcss',
-			'postcss',
+			'@tailwindcss/vite',
 			'@tailwindcss/forms',
 			// i18n
 			...(i18n
@@ -141,22 +140,6 @@ async function installBase({ i18n, ide }: Options) {
 					]
 				: []),
 		],
-	})
-
-	await editFiles({
-		title: 'configure PostCSS',
-		files: 'package.json',
-		operations: {
-			type: 'edit-json',
-			merge: {
-				postcss: {
-					plugins: {
-						autoprefixer: {},
-						tailwindcss: {},
-					},
-				},
-			},
-		},
 	})
 
 	await installPackages({
